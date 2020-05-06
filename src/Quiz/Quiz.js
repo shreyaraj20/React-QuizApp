@@ -1,128 +1,124 @@
-import React, { Component } from "react";
-import QuizData from "./QuizData";
+import React from "react";
+import quizData from "./QuizData";
 
-class Quiz extends Component {
+class Quiz extends React.Component {
   state = {
-    userAnswer: null,
     currentQuestion: 0,
-    options: []
+    myAnswer: null,
+    options: [],
+    score: 0,
+    disabled: true,
+    isEnd: false
   };
 
-  loadQuiz = () => {
-    const { currentQuestion } = this.state;
+  loadQuizData = () => {
+    // console.log(quizData[0].question)
     this.setState(() => {
       return {
-        questions: QuizData[currentQuestion].question,
-        options: QuizData[currentQuestion].options,
-        answer: QuizData[currentQuestion].userAnswer,
-        quizEnd: false,
-        score: 0,
-        disabled: true
+        questions: quizData[this.state.currentQuestion].question,
+        answer: quizData[this.state.currentQuestion].answer,
+        options: quizData[this.state.currentQuestion].options
       };
     });
   };
 
   componentDidMount() {
-    this.loadQuiz();
+    this.loadQuizData();
   }
-
   nextQuestionHandler = () => {
-    const { userAnswer, answers, score } = this.state;
-    this.setState({
-      currentQuestion: this.state.currentQuestion + 1
-    });
-    console.log(this.state.currentQuestion);
+    // console.log('test')
+    const { myAnswer, answer, score } = this.state;
 
-    if (userAnswer === answers) {
+    if (myAnswer === answer) {
       this.setState({
         score: score + 1
       });
     }
+
+    this.setState({
+      currentQuestion: this.state.currentQuestion + 1
+    });
+    console.log(this.state.currentQuestion);
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { currentQuestion } = this.state;
     if (this.state.currentQuestion !== prevState.currentQuestion) {
       this.setState(() => {
         return {
           disabled: true,
-          questions: QuizData[currentQuestion].question,
-          options: QuizData[currentQuestion].options,
-          answer: QuizData[currentQuestion].userAnswer
+          questions: quizData[this.state.currentQuestion].question,
+          options: quizData[this.state.currentQuestion].options,
+          answer: quizData[this.state.currentQuestion].answer
         };
       });
     }
   }
-
+  //check answer
   checkAnswer = answer => {
-    this.setState({
-      userAnswer: answer,
-      disabled: false
-    });
+    this.setState({ myAnswer: answer, disabled: false });
   };
-
   finishHandler = () => {
-    if (this.state.currentQuestion === QuizData.length - 1) {
+    if (this.state.currentQuestion === quizData.length - 1) {
       this.setState({
-        quizEnd: true
+        isEnd: true
       });
     }
   };
   render() {
-    const {
-      questions,
-      options,
-      currentQuestion,
-      userAnswer,
-      quizEnd
-    } = this.state;
+    const { options, myAnswer, currentQuestion, isEnd } = this.state;
 
-    if (quizEnd) {
+    if (isEnd) {
       return (
-        <div>
-          <h2>You score is {this.state.score} points. </h2>
-          <p>The correct Answer's for he Questions was:</p>
-          <ul>
-            {QuizData.map((item, index) => (
-              <li className="ui floating message options" key={index}>
-                {item.answer}
-              </li>
-            ))}
-          </ul>
+        <div className="result">
+          <h3>Game Over your Final score is {this.state.score} points </h3>
+          <p>
+            The correct answer's for the questions was
+            <ul>
+              {quizData.map((item, index) => (
+                <li className="ui floating message options" key={index}>
+                  {item.answer}
+                </li>
+              ))}
+            </ul>
+          </p>
+        </div>
+      );
+    } else {
+      return (
+        <div className="App">
+          <h1>{this.state.questions} </h1>
+          <span>{`Questions ${currentQuestion}  out of ${quizData.length -
+            1} remaining `}</span>
+          {options.map(option => (
+            <p
+              key={option.id}
+              className={`ui floating message options
+         ${myAnswer === option ? "selected" : null}
+         `}
+              onClick={() => this.checkAnswer(option)}
+            >
+              {option}
+            </p>
+          ))}
+          {currentQuestion < quizData.length - 1 && (
+            <button
+              className="ui inverted button"
+              disabled={this.state.disabled}
+              onClick={this.nextQuestionHandler}
+            >
+              Next
+            </button>
+          )}
+          {/* //adding a finish button */}
+          {currentQuestion === quizData.length - 1 && (
+            <button className="ui inverted button" onClick={this.finishHandler}>
+              Finish
+            </button>
+          )}
         </div>
       );
     }
-    return (
-      <div className="App">
-        <h2>{questions}</h2>
-        <h6>
-          <span>{`questions ${currentQuestion} out of ${QuizData.length -
-            1}`}</span>
-        </h6>
-        {options.map(option => (
-          <p
-            key={option.id}
-            className={`ui floating messgage options ${
-              userAnswer === option ? "selected" : null
-            }`}
-            onClick={() => this.nextQuestionHandler}
-          >
-            {option}
-          </p>
-        ))}
-        {currentQuestion < QuizData.length - 1 && (
-          <button
-            disabled={this.state.disabled}
-            onClick={this.nextQuestionHandler}
-          >
-            Next Question
-          </button>
-        )}
-        {currentQuestion === QuizData.length - 1 && (
-          <button onClick={this.finishHandler}>Finish</button>
-        )}
-      </div>
-    );
   }
 }
+
 export default Quiz;

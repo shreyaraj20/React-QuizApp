@@ -1,5 +1,11 @@
 import React from "react";
 import quizData from "./QuizData";
+import Dialog from "material-ui/Dialog";
+import AppBar from "material-ui/AppBar";
+import Grid from "@material-ui/core/Grid";
+import Avatar from "@material-ui/core/Avatar";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import "./Quiz.css";
 
 class Quiz extends React.Component {
   state = {
@@ -25,6 +31,7 @@ class Quiz extends React.Component {
   componentDidMount() {
     this.loadQuizData();
   }
+
   nextQuestionHandler = () => {
     // console.log('test')
     const { myAnswer, answer, score } = this.state;
@@ -54,9 +61,11 @@ class Quiz extends React.Component {
     }
   }
   //check answer
+
   checkAnswer = answer => {
     this.setState({ myAnswer: answer, disabled: false });
   };
+
   finishHandler = () => {
     if (this.state.currentQuestion === quizData.length - 1) {
       this.setState({
@@ -85,37 +94,78 @@ class Quiz extends React.Component {
       );
     } else {
       return (
-        <div className="App">
-          <h1>{this.state.questions} </h1>
-          <span>{`Questions ${currentQuestion}  out of ${quizData.length -
-            1} remaining `}</span>
-          {options.map(option => (
-            <p
-              key={option.id}
-              className={`ui floating message options
-         ${myAnswer === option ? "selected" : null}
-         `}
-              onClick={() => this.checkAnswer(option)}
+        <MuiThemeProvider>
+          <React.Fragment>
+            <Dialog
+              open="true"
+              fullWidth="true"
+              maxWidth="sm"
+              className="dialog"
+              style={{
+                backgroundColor: "transparent"
+              }}
             >
-              {option}
-            </p>
-          ))}
-          {currentQuestion < quizData.length - 1 && (
-            <button
-              className="ui inverted button"
-              disabled={this.state.disabled}
-              onClick={this.nextQuestionHandler}
-            >
-              Next
-            </button>
-          )}
-          {/* //adding a finish button */}
-          {currentQuestion === quizData.length - 1 && (
-            <button className="ui inverted button" onClick={this.finishHandler}>
-              Finish
-            </button>
-          )}
-        </div>
+              <AppBar
+                title={`Questions ${currentQuestion}  out of ${quizData.length -
+                  1} remaining `}
+                style={{
+                  backgroundColor: "#373836",
+                  color: "red"
+                }}
+              />
+              <div className="Quiz">
+                <h3>{this.state.questions}</h3>
+
+                {options.map((option, i) => (
+                  <p
+                    key={option.id}
+                    className={`options ${
+                      myAnswer === option ? "selected" : "wrong"
+                    }`}
+                    onClick={() => this.checkAnswer(option)}
+                  >
+                    <Grid container spacing={1}>
+                      <Avatar
+                        style={{
+                          backgroundColor: "#373836",
+                          color: "white",
+                          marginRight: "30px"
+                        }}
+                      >
+                        {i + 1}
+                      </Avatar>
+                      {option}
+                    </Grid>
+                  </p>
+                ))}
+                <div>
+                  {currentQuestion < quizData.length - 1 && (
+                    <button
+                      className="ui inverted button"
+                      disabled={this.state.disabled}
+                      onClick={this.nextQuestionHandler}
+                    >
+                      Next
+                    </button>
+                  )}
+                  <button
+                    className="ui inverted button"
+                    disabled={this.state.disabled}
+                    onClick={this.nextQuestionHandler}
+                  >
+                    Save
+                  </button>
+                </div>
+                {/* //adding a finish button */}
+                {currentQuestion === quizData.length - 1 && (
+                  <button className="buttonn" onClick={this.finishHandler}>
+                    Finish
+                  </button>
+                )}
+              </div>
+            </Dialog>
+          </React.Fragment>
+        </MuiThemeProvider>
       );
     }
   }

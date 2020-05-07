@@ -1,0 +1,43 @@
+.dialog {
+  background: url("https://i.insider.com/5d03aa8e6fc9201bc7002b43?width=1136&format=jpeg");
+  background-size: cover;
+  background-position: center;
+}
+h3 {
+  color: #373836;
+}
+
+.options {
+  cursor: pointer;
+  padding: 10px;
+  font-size: 18px;
+  border-bottom: 1px solid #373836;
+}
+
+.selected {
+  background-color: #ff6666;
+  color: white;
+}
+
+.options:active {
+  background-color: #373836;
+  color: white;
+  animation: scale 0.7s ease-in-out both;
+}
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+ul {
+  list-style-type: none;
+}

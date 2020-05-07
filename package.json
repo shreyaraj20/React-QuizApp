@@ -5,8 +5,13 @@
   "keywords": ["react", "starter"],
   "main": "src/index.js",
   "dependencies": {
+    "@material-ui/core": "4.9.13",
+    "bootstrap": "4.4.1",
+    "material-ui": "0.20.2",
     "react": "16.12.0",
+    "react-bootstrap": "1.0.1",
     "react-dom": "16.12.0",
+    "react-router": "5.1.2",
     "react-scripts": "3.0.1"
   },
   "devDependencies": {

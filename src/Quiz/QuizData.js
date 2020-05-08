@@ -97,7 +97,7 @@ const QuizData = [
   },
   {
     id: 17,
-    question: `Where is the Leaning Tower of Pisa located? `,
+    question: `Where is the Leaning Tower of located? `,
     options: [`London,UK `, `Pisa,Italy`, `Paris,France`],
     answer: ` Pisa, Italy `
   },

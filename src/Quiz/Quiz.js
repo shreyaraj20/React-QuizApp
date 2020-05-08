@@ -17,11 +17,11 @@ class Quiz extends React.Component {
     options: [],
     score: 0,
     disabled: true,
-    isEnd: false
+    isEnd: false,
+    count: 10
   };
 
   loadQuizData = () => {
-    // console.log(quizData[0].question)
     this.setState(() => {
       return {
         questions: quizData[this.state.currentQuestion].question,
@@ -33,21 +33,34 @@ class Quiz extends React.Component {
 
   componentDidMount() {
     this.loadQuizData();
+    this.myInterval = setInterval(() => {
+      if (this.state.count === 0) {
+        this.setState({ count: 10 });
+      }
+      this.setState(prevState => ({
+        count: prevState.count - 1
+      }));
+    }, 1000);
+    this.interval = setInterval(this.nextQuestionHandler, 10000);
   }
 
   nextQuestionHandler = () => {
-    // console.log('test')
     const { myAnswer, answer, score } = this.state;
     if (myAnswer === answer) {
       this.setState({ score: score + 1 });
     }
     this.setState({
-      currentQuestion: this.state.currentQuestion + 1
+      currentQuestion: this.state.currentQuestion + 1,
+      count: 10
     });
     console.log(this.state.currentQuestion);
   };
 
   componentDidUpdate(prevProps, prevState) {
+    if (this.state.currentQuestion === quizData.length - 1) {
+      clearInterval(this.interval);
+      setTimeout(this.finishHandler, 10000);
+    }
     if (this.state.currentQuestion !== prevState.currentQuestion) {
       this.setState(() => {
         return {
@@ -59,8 +72,6 @@ class Quiz extends React.Component {
       });
     }
   }
-  //check answer
-
   checkAnswer = answer => {
     const { myAnswer } = this.state;
     if (myAnswer === answer) {
@@ -77,24 +88,28 @@ class Quiz extends React.Component {
       });
     }
   };
+
   render() {
-    const { options, myAnswer, currentQuestion, isEnd } = this.state;
+    const { options, myAnswer, currentQuestion, isEnd, count } = this.state;
 
     if (isEnd) {
       return (
-        <div className="result">
-          <Card variant="outlined" className="card">
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
-                <h1>
-                  Your Final score is {this.state.score} out of{" "}
-                  {quizData.length} points.
-                </h1>
-              </Typography>
-            </CardContent>
-          </Card>
+        <Card
+          variant="outlined"
+          className="card"
+          style={{ background: "black" }}
+        >
+          <CardContent>
+            <Typography color="textSecondary" gutterBottom>
+              <h1>
+                Your Final score is {this.state.score} out of {quizData.length}{" "}
+                points.
+              </h1>
+            </Typography>
+          </CardContent>
+        </Card>
 
-          {/*            
+        /*            
                 <p>
                   The correct answer's for the questions was
                   <dl>
@@ -105,8 +120,7 @@ class Quiz extends React.Component {
                       </dl>
                     ))}
                   </dl>
-                </p> */}
-        </div>
+                </p> */
       );
     } else {
       return (
@@ -124,7 +138,7 @@ class Quiz extends React.Component {
               <AppBar
                 title={`Questions ${currentQuestion + 1}  out of ${
                   quizData.length
-                } remaining `}
+                } remaining Count-${count}`}
                 style={{
                   backgroundColor: "#373836",
                   color: "red"
@@ -137,7 +151,7 @@ class Quiz extends React.Component {
                   <p
                     key={option.id}
                     className={`options ${
-                      myAnswer === option ? "selected" : "wrong"
+                      myAnswer === option ? "selected" : null
                     }`}
                     onClick={() => this.checkAnswer(option)}
                   >
@@ -161,9 +175,6 @@ class Quiz extends React.Component {
                     className="button"
                     disabled={this.state.disabled}
                     onClick={this.nextQuestionHandler}
-                    style={{
-                      backgroundColor: "#1d1d1f"
-                    }}
                   >
                     Next
                   </button>

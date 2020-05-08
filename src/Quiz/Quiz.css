@@ -3,6 +3,24 @@
   background-size: cover;
   background-position: center;
 }
+.card {
+  height: 200px;
+  width: 500px;
+  background-color: black;
+  position: relative;
+  top: 35%;
+  z-index: 1;
+}
+
+.card h1 {
+  font-weight: 600px;
+  font-size: 50px;
+  color: white;
+  line-height: 1.2;
+  text-shadow: 2px 2px 8px #ff0000;
+  position: relative;
+  top: 50%;
+}
 h3 {
   color: #373836;
 }
@@ -24,7 +42,9 @@ h3 {
   color: white;
   animation: scale 0.7s ease-in-out both;
 }
-
+.dialog {
+  background-color: black;
+}
 @keyframes scale {
   0% {
     transform: scale(1);

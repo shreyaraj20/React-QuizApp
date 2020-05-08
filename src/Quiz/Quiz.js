@@ -6,6 +6,9 @@ import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import "./Quiz.css";
+import Card from "@material-ui/core/Card";
+import Typography from "@material-ui/core/Typography";
+import CardContent from "@material-ui/core/CardContent";
 
 class Quiz extends React.Component {
   state = {
@@ -35,13 +38,9 @@ class Quiz extends React.Component {
   nextQuestionHandler = () => {
     // console.log('test')
     const { myAnswer, answer, score } = this.state;
-
     if (myAnswer === answer) {
-      this.setState({
-        score: score + 1
-      });
+      this.setState({ score: score + 1 });
     }
-
     this.setState({
       currentQuestion: this.state.currentQuestion + 1
     });
@@ -63,7 +62,12 @@ class Quiz extends React.Component {
   //check answer
 
   checkAnswer = answer => {
-    this.setState({ myAnswer: answer, disabled: false });
+    const { myAnswer } = this.state;
+    if (myAnswer === answer) {
+      this.setState({ myAnswer: answer, disabled: false });
+    } else {
+      this.setState({ myAnswer: answer, disabled: false });
+    }
   };
 
   finishHandler = () => {
@@ -79,17 +83,29 @@ class Quiz extends React.Component {
     if (isEnd) {
       return (
         <div className="result">
-          <h3>Game Over your Final score is {this.state.score} points </h3>
-          <p>
-            The correct answer's for the questions was
-            <ul>
-              {quizData.map((item, index) => (
-                <li className="ui floating message options" key={index}>
-                  {item.answer}
-                </li>
-              ))}
-            </ul>
-          </p>
+          <Card variant="outlined" className="card">
+            <CardContent>
+              <Typography color="textSecondary" gutterBottom>
+                <h1>
+                  Your Final score is {this.state.score} out of{" "}
+                  {quizData.length} points.
+                </h1>
+              </Typography>
+            </CardContent>
+          </Card>
+
+          {/*            
+                <p>
+                  The correct answer's for the questions was
+                  <dl>
+                    {quizData.map((item, index) => (
+                      <dl key={index}>
+                        <dt>{item.currentQuestion}</dt>
+                        <dd>{item.answer} </dd>
+                      </dl>
+                    ))}
+                  </dl>
+                </p> */}
         </div>
       );
     } else {
@@ -106,8 +122,9 @@ class Quiz extends React.Component {
               }}
             >
               <AppBar
-                title={`Questions ${currentQuestion}  out of ${quizData.length -
-                  1} remaining `}
+                title={`Questions ${currentQuestion + 1}  out of ${
+                  quizData.length
+                } remaining `}
                 style={{
                   backgroundColor: "#373836",
                   color: "red"
@@ -138,27 +155,23 @@ class Quiz extends React.Component {
                     </Grid>
                   </p>
                 ))}
-                <div>
-                  {currentQuestion < quizData.length - 1 && (
-                    <button
-                      className="ui inverted button"
-                      disabled={this.state.disabled}
-                      onClick={this.nextQuestionHandler}
-                    >
-                      Next
-                    </button>
-                  )}
+
+                {currentQuestion < quizData.length - 1 && (
                   <button
-                    className="ui inverted button"
+                    className="button"
                     disabled={this.state.disabled}
                     onClick={this.nextQuestionHandler}
+                    style={{
+                      backgroundColor: "#1d1d1f"
+                    }}
                   >
-                    Save
+                    Next
                   </button>
-                </div>
+                )}
+
                 {/* //adding a finish button */}
                 {currentQuestion === quizData.length - 1 && (
-                  <button className="buttonn" onClick={this.finishHandler}>
+                  <button className="button" onClick={this.finishHandler}>
                     Finish
                   </button>
                 )}

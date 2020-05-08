@@ -18,7 +18,8 @@ class Quiz extends React.Component {
     score: 0,
     disabled: true,
     isEnd: false,
-    count: 10
+    count: 10,
+    time: 10000
   };
 
   loadQuizData = () => {
@@ -36,13 +37,25 @@ class Quiz extends React.Component {
     this.myInterval = setInterval(() => {
       if (this.state.count === 0) {
         this.setState({ count: 10 });
+      } else {
+        this.setState(prevState => ({
+          count: prevState.count - 1
+        }));
       }
-      this.setState(prevState => ({
-        count: prevState.count - 1
-      }));
     }, 1000);
-    this.interval = setInterval(this.nextQuestionHandler, 10000);
+    this.interval = setInterval(this.nextQuestion, this.state.time);
   }
+
+  nextQuestion = () => {
+    const { myAnswer, answer, score } = this.state;
+    if (myAnswer === answer) {
+      this.setState({ score: score + 1 });
+    }
+    this.setState({
+      currentQuestion: this.state.currentQuestion + 1,
+      time: 10000
+    });
+  };
 
   nextQuestionHandler = () => {
     const { myAnswer, answer, score } = this.state;
@@ -51,9 +64,9 @@ class Quiz extends React.Component {
     }
     this.setState({
       currentQuestion: this.state.currentQuestion + 1,
-      count: 10
+      count: 10,
+      time: 10000
     });
-    console.log(this.state.currentQuestion);
   };
 
   componentDidUpdate(prevProps, prevState) {

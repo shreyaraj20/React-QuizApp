@@ -7,7 +7,7 @@ class App extends Component {
   };
   render() {
     return (
-      <div className="App">
+      <div className="App container-fluid">
         {this.state.visible ? (
           <h1 className="heading">Test Your Knowledge</h1>
         ) : (

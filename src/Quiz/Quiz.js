@@ -1,7 +1,5 @@
 import React from "react";
 import quizData from "./QuizData";
-import Dialog from "material-ui/Dialog";
-import AppBar from "material-ui/AppBar";
 import Grid from "@material-ui/core/Grid";
 import Avatar from "@material-ui/core/Avatar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
@@ -137,18 +135,14 @@ class Quiz extends React.Component {
       );
     } else {
       return (
-        <MuiThemeProvider>
-          <React.Fragment>
-            <Dialog
-              open="true"
-              fullWidth="true"
-              maxWidth="sm"
-              className="dialog"
-              style={{
-                backgroundColor: "transparent"
-              }}
-            >
-              <AppBar
+        <div className="que">
+          <MuiThemeProvider>
+            <React.Fragment>
+              <h2>
+                Questions {currentQuestion + 1} out of {quizData.length}{" "}
+                remaining Count-{count}
+              </h2>
+              {/* <AppBar
                 title={`Questions ${currentQuestion + 1}  out of ${
                   quizData.length
                 } remaining Count-${count}`}
@@ -156,7 +150,7 @@ class Quiz extends React.Component {
                   backgroundColor: "#373836",
                   color: "red"
                 }}
-              />
+              /> */}
               <div className="Quiz">
                 <h3>{this.state.questions}</h3>
 
@@ -185,7 +179,7 @@ class Quiz extends React.Component {
 
                 {currentQuestion < quizData.length - 1 && (
                   <button
-                    className="button"
+                    className="but"
                     disabled={this.state.disabled}
                     onClick={this.nextQuestionHandler}
                   >
@@ -195,14 +189,14 @@ class Quiz extends React.Component {
 
                 {/* //adding a finish button */}
                 {currentQuestion === quizData.length - 1 && (
-                  <button className="button" onClick={this.finishHandler}>
+                  <button className="but" onClick={this.finishHandler}>
                     Finish
                   </button>
                 )}
               </div>
-            </Dialog>
-          </React.Fragment>
-        </MuiThemeProvider>
+            </React.Fragment>
+          </MuiThemeProvider>
+        </div>
       );
     }
   }

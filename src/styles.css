@@ -8,7 +8,7 @@ body {
 }
 
 .App {
-  height: 100vh;
+  height: 150vh;
   background: url("https://i.insider.com/5d03aa8e6fc9201bc7002b43?width=1136&format=jpeg");
   background-size: cover;
   background-position: center;
@@ -23,26 +23,30 @@ body {
 }
 
 .heading {
-  font-weight: 900px;
-  font-size: 90px;
+  font-weight: 700px;
+  font-size: 3.5rem;
   color: white;
   line-height: 1.2;
   text-shadow: 2px 2px 8px #ff0000;
+  background: transparent;
+  position: relative;
+  top: -20%;
 }
 
 .button {
   position: relative;
+  top: -20%;
   outline: none;
   text-decoration: none;
   border-radius: 50px;
   display: inline-block;
   justify-content: center;
   align-items: center;
+  opacity: 0.7;
   cursor: pointer;
   text-transform: uppercase;
-  height: 60px;
+  height: 70px;
   width: 90px;
-  opacity: 1;
   background-color: #373836;
   border: 1px solid white;
   box-shadow: 2px 2px 1px 1px gray;
@@ -76,6 +80,6 @@ body {
     transform: rotate(0deg) translate3d(0, 0, 0);
   }
 }
-.button:click {
+.button:active {
   opacity: 0;
 }
